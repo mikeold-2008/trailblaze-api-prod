@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const userRoutes = require('./routes/userRoutes');
 const cors = require('cors'); 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 9090;
 const uri = process.env.MONGO_URI
 
 // Connect to MongoDB
