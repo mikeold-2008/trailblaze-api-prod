@@ -3,10 +3,12 @@ const mongoose = require('mongoose');
 const userRoutes = require('./routes/userRoutes');
 const cors = require('cors'); 
 const app = express();
+require('dotenv').config()
 const port = process.env.PORT || 3000;
+const uri = PROCESS.ENV.MONGO_URI
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://xrssun:3W0uGdjh5gec8dKX@cluster0.z60yugb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
+mongoose.connect(uri);
 
 // Use the cors middleware to enable Cross-Origin Resource Sharing
 app.use(cors());
