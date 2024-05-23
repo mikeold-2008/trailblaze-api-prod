@@ -7,7 +7,8 @@ const userData = new mongoose.Schema({
  email: String,
  password: String,
  firstName: String,
- lastName: String
+ lastName: String,
+ friends: Array
 });
 
 userData.plugin(AutoIncrement, { inc_field: 'id' });
