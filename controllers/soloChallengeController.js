@@ -31,7 +31,8 @@ exports.getSoloChallengesByUserId = async (req,res) =>{
 
 
 exports.postSoloChallenge = async (req,res) =>{
-    const {exercise_name, user_id, duration, distance} = req.body 
+    const {exercise_name, user_id, duration, distance} = req.body
+    const date = new Date() 
 
     try{
     const soloChallenge = await SoloChallenge.create({
@@ -39,6 +40,7 @@ exports.postSoloChallenge = async (req,res) =>{
         "user_id": user_id,
         "duration": duration,
         "distance": distance,
+        "startDate": date,
         "pass": false
     })
     res.json({message: "Challenge created"})
