@@ -7,6 +7,9 @@ const app = express();
 const port = process.env.PORT || 9090;
 const uri = process.env.MONGO_URI
 
+
+const soloChallengeRoutes = require("./routes/soloChallengeRoutes")
+
 // Connect to MongoDB
 mongoose.connect(uri);
 
@@ -14,6 +17,10 @@ mongoose.connect(uri);
 app.use(cors());
 app.use(express.json());
 app.use('/users', userRoutes);
+
+
+
+app.use('/challenges/solo',soloChallengeRoutes)
 app.listen(port, () => {
  console.log(`Server is running on port ${port}`);
 });
