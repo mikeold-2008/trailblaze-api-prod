@@ -9,8 +9,8 @@ const twoPersonChallenge = new mongoose.Schema({
     challenge_accepter_id: Number,
     challenge_accepter_name: String,
     exercise_name: String,
-    duration: String,
-    target: String, 
+    duration: Number,
+    target: Number, 
     challenge_winner: Number,
     start_date: Date,
     challenge_accepted: Boolean
