@@ -6,8 +6,8 @@ const soloChallenge = new mongoose.Schema({
     challenge_id: Number,
     exercise_name: String,
     user_id: Number,
-    duration: String,
-    distance: String,
+    duration: Number,
+    distance: Number,
     startDate: Date,
     pass: Boolean
 })
