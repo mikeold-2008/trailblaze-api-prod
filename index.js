@@ -9,6 +9,7 @@ const uri = process.env.MONGO_URI
 
 
 const soloChallengeRoutes = require("./routes/soloChallengeRoutes")
+const twoPersonChallengeRoutes = require("./routes/twoPersonChallengeRoutes")
 
 // Connect to MongoDB
 mongoose.connect(uri);
@@ -21,6 +22,8 @@ app.use('/users', userRoutes);
 
 
 app.use('/challenges/solo',soloChallengeRoutes)
+app.use('/challenges/dual',twoPersonChallengeRoutes)
+
 app.listen(port, () => {
  console.log(`Server is running on port ${port}`);
 });
