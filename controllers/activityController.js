@@ -1,6 +1,6 @@
 const Activity = require("../models/activityModel");
 
-const getAllActivities = async (req, res) => {
+const getAllActivities = async (req, res, next) => {
   try {
     const allActivities = await Activity.find();
     if (allActivities.length === 0) {
@@ -9,51 +9,91 @@ const getAllActivities = async (req, res) => {
       res.status(200).json(allActivities);
     }
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "An error occurred while fetching all activities" });
+    next(error);
   }
 };
 
 const getSingleActivity = async (req, res, next) => {
   const { activity_id } = req.params;
+  // code: 'ERR_ASSERTION' due to mismatch in scheme and real input
+  if (isNaN(activity_id)) {
+    return res.status(400).json({ message: "Bad request" });
+  }
   try {
     const singleActivity = await Activity.findOne({ activity_id: activity_id });
+    // when activity_id is non-existent number, singleActivity is null
     if (!singleActivity) {
-      res.status(404).json({ message: "No matching activity found" });
+      res.status(404).json({ message: "No matching result found" });
     } else {
       res.status(200).json(singleActivity);
     }
   } catch (error) {
-    // code: 'ERR_ASSERTION',
-    // console.error(error);
     next(error);
-    res
-      .status(500)
-      .json({ message: "An error occurred while fetching the activity" });
   }
 };
 
-const postOneActivity = async (req, res) => {
-  const activityToAdd = req.body;
+const postOneActivity = async (req, res, next) => {
+  const { exercise_name, user_id } = req.body;
+  try {
+    const newActivity = await Activity.create({
+      exercise_name: exercise_name,
+      user_id: user_id,
+    });
+    if (!newActivity) {
+      res.status(500).json({ message: "Request failed" });
+    } else {
+      res.status(201).json(newActivity);
+    }
+  } catch (error) {
+    next(error);
+  }
 };
 
-const deleteOneActivity = async (req, res) => {
+const updateOneActivity = async (req, res, next) => {
+  const { completed_at } = req.body;
   const { activity_id } = req.params;
+  if (isNaN(activity_id)) {
+    res.status(400).send({ message: "Bad request" });
+  }
   try {
-    const doesActivityExist = await Activity.findOne({
+    const activityFound = await Activity.findOne({ activity_id: activity_id });
+    if (!activityFound) {
+      res.status(404).send({ message: "No matching result found" });
+    } else {
+      const updatedActivity = await Activity.updateOne(
+        { activity_id: activity_id },
+        { completed_at: completed_at }
+      );
+      if (updatedActivity.acknowledged) {
+        res.status(200).json({ message: "Activity updated" });
+      } else {
+        res.status(400).json({ message: "Bad request" });
+      }
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteOneActivity = async (req, res, next) => {
+  const { activity_id } = req.params;
+  if (isNaN(activity_id)) {
+    res.status(400).send({ message: "Bad request" });
+  }
+  try {
+    const activityFound = await Activity.findOne({
       activity_id: activity_id,
     });
-    if (!doesActivityExist) {
-      res.send(404).json({
-        message: "Activity not found",
+    if (!activityFound) {
+      res.status(404).json({
+        message: "No matching activity found",
       });
     } else {
       const activityToDelete = await Activity.deleteOne({
         activity_id: activity_id,
       });
       if (activityToDelete.acknowledged) {
-        res.send(200).json({ message: "user deleted" });
+        res.status(200).json({ message: "activity successfully deleted" });
       } else {
         res
           .status(500)
@@ -61,10 +101,32 @@ const deleteOneActivity = async (req, res) => {
       }
     }
   } catch (error) {
-    res
-      .status(501)
-      .json({ message: "An error occurred while deleting the activity" });
+    next(error);
   }
 };
 
-module.exports = { getAllActivities, getSingleActivity, deleteOneActivity };
+const getActivitiesByUser = async (req, res, next) => {
+  const { user_id } = req.params;
+  if (isNaN(user_id)) {
+    return res.status(400).json({ message: "Bad request" });
+  }
+  try {
+    const activitiesByUser = await Activity.find({ user_id: user_id });
+    if (activitiesByUser.length === 0) {
+      res.status(404).json({ message: "No matching activities found" });
+    } else {
+      res.status(200).send(activitiesByUser);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  getAllActivities,
+  getSingleActivity,
+  deleteOneActivity,
+  postOneActivity,
+  updateOneActivity,
+  getActivitiesByUser,
+};
