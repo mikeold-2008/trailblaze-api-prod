@@ -16,7 +16,7 @@ exports.getSoloChallengesByUserId = async (req,res) =>{
     try{
         const challengeList = await SoloChallenge.find(mongoQuery)
         if(challengeList.length===0){
-            return res.status(404).json({ message: 'No solo challenges found for this user' });
+            return res.status(404).json({ "message": 'No solo challenges found for this user' });
         }
         res.json(challengeList);
     }
@@ -43,7 +43,7 @@ exports.postSoloChallenge = async (req,res) =>{
         "startDate": date,
         "pass": false
     })
-    res.json({message: "Challenge created"})
+    res.json({"message": "Challenge created"})
     }
     catch(error){
         res.status(500).json({ error: 'An error occurred while creating the challenge' });

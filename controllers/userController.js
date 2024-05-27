@@ -1,4 +1,5 @@
 const User = require("../models/userModel")
+const bcrypt = require ('bcrypt')
 
 
 // Get a specific user by ID number
@@ -28,11 +29,17 @@ exports.getUserPasswordHash = async(req,res) =>{
   const token = req.params.token;
   try{
     const user = await User.findOne({email: userEmail});
-    if((user.password === token) && (user.email === userEmail)){
-      res.json({"id": user.id}) 
+    if(user){
+      const validPassword = await bcrypt.compare(token,user.password)
+      if(validPassword){
+        res.status(200).json({"id": user.id})
+      }
+      else{
+        res.status(400).json({"message": "Couldn't authenticate user"})
+      }
     }
     else{
-      res.json({message: "Couldn't authenticate user"})
+      res.status(404).json({"message": "User not found"})
     }
   }
   catch(error){
@@ -52,7 +59,7 @@ exports.postUser = async (req,res) =>{
       await User.create(
         { 
           "email": email,
-          "password": password,
+          "password": await bcrypt.hash(password,10),
           "firstName": firstName,
           "lastName": lastName,
           "friends": []
