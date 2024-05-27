@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const AutoIncrement = require('mongoose-sequence')(mongoose);
-
+const bcrypt = require ('bcrypt')
 
 const userData = new mongoose.Schema({
  id: Number,
