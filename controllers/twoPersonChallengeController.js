@@ -21,7 +21,7 @@ exports.getTwoPersonChallengesByUserId = async (req,res) =>{
         challengeList = [...challengeList, ...proposerList, ...accepterList]
 
         if(proposerList.length===0 && accepterList.length ===0){
-            return res.status(404).json({ message: 'No challenges found for this user' });
+            return res.status(404).json({ "message": 'No challenges found for this user' });
         }
         res.json(challengeList);
     }
@@ -51,7 +51,7 @@ exports.postTwoPersonChallenge = async (req,res) =>{
             start_date: date,
             challenge_accepted: false
         })
-        res.json({message: "Challenge created"})
+        res.json({"message": "Challenge created"})
     }
     catch(error){
         res.status(500).json({ error: 'An error occurred while creating the challenge' });
