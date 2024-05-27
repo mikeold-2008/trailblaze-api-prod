@@ -73,3 +73,17 @@ exports.patchChallengeAccepted = async (req,res) =>{
     }
 
 }
+
+exports.patchChallengeWinner = async (req,res) =>{
+    const dual_challenge_id = req.params.challenge_id
+    const {winner_id} = req.body
+    try{
+        const challenge = await TwoPersonChallenge.findOne({dual_challenge_id: dual_challenge_id})
+        challenge.challenge_winner = winner_id 
+        await challenge.save()
+        res.status(200).json({"message": `Challenge winner updated to user ID ${winner_id}`})
+    }
+    catch(error){
+        res.status(500).json({ error: 'An error occurred while updating the challenge' });
+    }
+}

@@ -8,4 +8,6 @@ router.post('/',twoPersonChallengeController.postTwoPersonChallenge)
 
 router.patch('/:challenge_id/accepted',twoPersonChallengeController.patchChallengeAccepted)
 
+router.patch('/:challenge_id/winner',twoPersonChallengeController.patchChallengeWinner)
+
 module.exports = router

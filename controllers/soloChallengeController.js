@@ -26,10 +26,6 @@ exports.getSoloChallengesByUserId = async (req,res) =>{
 }
 
 
-
-
-
-
 exports.postSoloChallenge = async (req,res) =>{
     const {exercise_name, user_id, duration, distance} = req.body
     const date = new Date() 
@@ -48,4 +44,25 @@ exports.postSoloChallenge = async (req,res) =>{
     catch(error){
         res.status(500).json({ error: 'An error occurred while creating the challenge' });
     }
+}
+
+
+exports.patchSoloChallengePass = async (req,res) =>{
+    const challengeId = req.params.id
+    const {pass} = req.body
+try{
+    const challenge = await SoloChallenge.findOne({"challenge_id": challengeId})
+    if(challenge){
+        challenge.pass = pass
+        await challenge.save()
+        res.status(200).json({"message": `Challenge pass updated to ${pass}`})
+    }
+    else{
+        res.status(404).json({ error: 'Challenge not found' });
+    }
+}
+catch(error){
+    res.status(500).json({ error: 'An error occurred while updating the challenge' });
+}
+
 }
