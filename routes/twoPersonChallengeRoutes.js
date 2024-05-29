@@ -10,4 +10,8 @@ router.patch('/:challenge_id/accepted',twoPersonChallengeController.patchChallen
 
 router.patch('/:challenge_id/winner',twoPersonChallengeController.patchChallengeWinner)
 
+
+router.patch('/:challenge_id/progress',twoPersonChallengeController.patchChallengeProgress)
+
 module.exports = router
+

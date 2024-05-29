@@ -17,7 +17,7 @@ exports.getUser = async (req, res) => {
           "lastName": user.lastName,
           "friends": user.friends
         }
-        res.json(userDetails);
+        res.status(200).json(userDetails);
     } catch (error) {
       res.status(500).json({ error: 'An error occurred while fetching the user' });
     }
