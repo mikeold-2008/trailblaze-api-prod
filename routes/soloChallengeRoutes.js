@@ -10,6 +10,8 @@ router.post('/',soloChallengeController.postSoloChallenge)
 
 router.patch("/:id", soloChallengeController.patchSoloChallengePass)
 
+router.patch('/:id/progress',soloChallengeController.patchSoloChallengeProgress)
+
 
 
 module.exports = router;

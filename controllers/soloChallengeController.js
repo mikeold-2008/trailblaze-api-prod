@@ -36,6 +36,7 @@ exports.postSoloChallenge = async (req,res) =>{
         "user_id": user_id,
         "duration": duration,
         "distance": distance,
+        "progress": 0,
         "startDate": date,
         "pass": false
     })
@@ -65,4 +66,27 @@ catch(error){
     res.status(500).json({ error: 'An error occurred while updating the challenge' });
 }
 
+}
+
+
+
+exports.patchSoloChallengeProgress = async (req,res) =>{
+    const challenge_id = req.params.id
+    const {progress} = req.body
+    try{
+        const challenge = await SoloChallenge.findOne({challenge_id : challenge_id})
+        if(challenge){
+            let sum = challenge.progress + progress
+            challenge.progress = sum
+
+            await challenge.save()
+            res.status(200).json({"message": `Challenge progress updated successfully`})
+        }
+        else{
+            res.status(404).json({ error: 'Unable to find the challenge' });       
+        }
+    }
+    catch(error){
+        res.status(500).json({ error: 'An error occurred while updating the challenge' });
+    }
 }
