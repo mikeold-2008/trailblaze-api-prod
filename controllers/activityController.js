@@ -33,11 +33,13 @@ const getSingleActivity = async (req, res, next) => {
 };
 
 const postOneActivity = async (req, res, next) => {
-  const { exercise_name, user_id } = req.body;
+  const { exercise_name, user_id, duration, completed_at } = req.body;
   try {
     const newActivity = await Activity.create({
       exercise_name: exercise_name,
       user_id: user_id,
+      activity_duration: duration,
+      completed_at: completed_at,
     });
     if (!newActivity) {
       res.status(500).json({ message: "Request failed" });
