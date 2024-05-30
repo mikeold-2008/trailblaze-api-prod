@@ -5,7 +5,7 @@ const activityData = new mongoose.Schema({
   activity_id: Number,
   exercise_name: String,
   user_id: Number,
-  distance: { type: Number, default: 0 },
+  distance: Number,
   activity_duration: String,
   created_at: { type: Date, default: Date.now() },
   completed_at: Date,
